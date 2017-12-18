@@ -1,0 +1,9 @@
+.mainheader
+{
+	background-image: url('./images/flag.jpg');
+	background-attachment: fixed;
+	background-position: center;
+	background-size: 100%;
+	min-height: 500px;
+	padding-bottom: 100px;
+}
