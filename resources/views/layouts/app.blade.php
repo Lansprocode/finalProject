@@ -40,7 +40,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         <li><a href="{{ url('/home') }}">Home</a></li>
-                        <li><a href="{{ url('/view/{id}') }}">View Posts</a></li>
+                     
                         <li><a href="{{ url('/post') }}">Add Post</a></li>
                     </ul>
 
@@ -79,8 +79,19 @@
             </div>
         </nav>
 
+    
+
         @yield('content')
     </div>
+    <div class="container text-center">
+        <div class="row">
+            <footer class="container-fluid">
+                <a href="https://www.instagram.com/lansperformance/" target="_blank"><p>@lansPerformance</p></a>
+            </footer>
+        </div>
+    </div>
+     
+
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>

@@ -6,9 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
 use App\Category;
 use App\Post;
+use App\Like;
+use App\Dislike;
 use Auth;
+
 
 class PostController extends Controller
 {
@@ -51,8 +56,11 @@ class PostController extends Controller
     public function view($post_id)
     {
     	$posts = Post::where('id', '=', $post_id)->get();
+        $likePost = Post::find($post_id);
+        $likeCtr = Like::where(['post_id' => $likePost->id])->count();
+        $dislikeCtr = Dislike::where(['post_id' => $likePost->id])->count();
     	$categories = Category::all();
-    	return view('posts.view', ['posts' => $posts, 'categories' => $categories]);
+    	return view('posts.view', ['posts' => $posts, 'categories' => $categories, 'likeCtr' => $likeCtr, 'dislikeCtr' => $dislikeCtr]);
     }
 
     public function edit($post_id)
@@ -94,7 +102,72 @@ class PostController extends Controller
                 'category_id' => $posts->category_id,
                 'post_image' => $posts->post_image
          );
+         Post::where('id', $post_id)
+         ->update($data);
          $posts->update($data);
-         return redirect('/home')->with('response', 'Profile Added Successfully');
+         return redirect('/home')->with('response', 'Post Updated Successfully');
+    }
+
+    public function deletePost($post_id)
+    {
+        Post::where('id', $post_id)
+        ->delete();
+        return redirect('/home')->with('response', 'Post Delete Successfully');
+    }
+
+    public function category($cat_id)
+    {
+        $categories = Category::all();
+        $posts = DB::table('posts')
+                 ->join('categories', 'posts.category_id', '=', 'categories.id')
+                 ->select('posts.*', 'categories.*')
+                 ->where(['categories.id' => $cat_id])
+                 ->get();
+    
+        return view('categories.categoriesposts',
+            [
+                'categories' => $categories,
+                'posts' => $posts
+            ]);
+    }
+
+    public function like($id)
+    {
+        $loggedin_user = Auth::user()->id;
+        $like_user = Like::where(['user_id' => $loggedin_user, 'post_id' => $id])->first();
+        if(empty($like_user->user_id)) {
+            $user_id = Auth::user()->id;
+            $email = Auth::user()->email;
+            $post_id = $id;
+            $like = new Like;
+            $like->user_id = $user_id;
+            $like->email = $email;
+            $like->post_id = $post_id;
+            $like->save();
+            return redirect("/view/{$id}");
+        }
+        else{
+            return redirect("/view/{$id}");
+        }
+    }
+
+    public function dislike($id)
+    {
+        $loggedin_user = Auth::user()->id;
+        $like_user = Dislike::where(['user_id' => $loggedin_user, 'post_id' => $id])->first();
+        if(empty($like_user->user_id)) 
+        {
+            $user_id = Auth::user()->id;
+            $email = Auth::user()->email;
+            $post_id = $id;
+            $like = new Dislike;
+            $like->user_id = $user_id;
+            $like->post_id = $post_id;
+            $like->save();
+            return redirect("/view/{$id}");
+        }
+        else{
+            return redirect("/view/{$id}");
+        }
     }
 }

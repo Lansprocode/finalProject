@@ -28,23 +28,7 @@
                                 <img src="{{ $post->post_image }}" alt="" width="400px">
                                 <p>{{ $post->post_body }}</p>
 
-                                <ul class="nav nav-pills">
-                                    <li role="presentation">
-                                        <a href='{{ url("/like/{$post->id}") }}'>
-                                            <span class="fa fa-thumbs-up"> Like ({{$likeCtr}})</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a href='{{ url("/dislike/{$post->id}") }}'>
-                                            <span class="fa fa-thumbs-down"> Dislike ({{$dislikeCtr}})</span>
-                                        </a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a href='{{ url("/comment/{$post->id}") }}'>
-                                            <span class="fa fa-comments-o"> Comment</span>
-                                        </a>
-                                    </li>
-                                </ul>
+                                
 
                             @endforeach
                         @else

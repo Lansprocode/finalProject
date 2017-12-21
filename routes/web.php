@@ -23,7 +23,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/post', 'PostController@post')->name('post');
+Route::get('/post', 'PostController@post')->name('post')->name('post');
 
 Route::get('/profile', 'ProfileController@profile')->name('profile');
 
@@ -40,5 +40,13 @@ Route::get('/view/{id}', 'PostController@view')->name('view/{id}');
 Route::get('/edit/{id}', 'PostController@edit')->name('edit');
 
 Route::post('/editPost/{id}', 'PostController@editPost')->name('editPost');
+
+Route::get('/delete/{id}', 'PostController@deletePost')->name('delete');
+
+Route::get('/category/{id}', 'PostController@category');
+
+Route::get('/like/{id}', 'PostController@like');
+
+Route::get('/dislike/{id}', 'PostController@dislike');
 
 
